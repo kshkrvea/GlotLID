@@ -30,7 +30,7 @@ class CustomLID:
         # dot
         result_vector = np.dot(self.output_matrix[self.language_indices, :], sentence_vector)
 
-        # top k indices on logits
+        # top k indices on probs
         k = min(k, len(result_vector))
         top_k_indices_unsorted = np.argpartition(result_vector, -k)[-k:]
         top_k_indices = top_k_indices_unsorted[np.argsort(result_vector[top_k_indices_unsorted])[::-1]]
