@@ -1,0 +1,11 @@
+[before vs optimized_before]
+Max Absolute Difference: 0.00e+00
+Speed Original: 2508.8 samples/sec, 0.000399 sec/sample
+Speed Optimized: 2879.5 samples/sec, 0.000347 sec/sample
+Total Speedup: 12.9%
+
+[after vs optimized_after]
+Max Absolute Difference: 0.00e+00
+Speed Original: 3627.7 samples/sec, 0.000276 sec/sample
+Speed Optimized: 4463.0 samples/sec, 0.000224 sec/sample
+Total Speedup: 18.7%
