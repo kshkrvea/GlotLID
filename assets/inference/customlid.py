@@ -19,59 +19,10 @@ class CustomLID:
         self.labels = list(np.array(self.labels)[self.language_indices])
         
         # predict
-        if mode == 'after':
-            self.predict = self.predict_limit_after_softmax
-        elif mode == 'optimized_after':
-            self.predict = self.optimized_predict_limit_after_softmax
-        elif mode == 'optimized_before':
-            self.predict = self.optimized_predict_limit_before_softmax
-        else:
-            self.predict = self.predict_limit_before_softmax
+        self.predict = self.predict_limit_after_softmax if mode=='after' else self.predict_limit_before_softmax
 
     
     def predict_limit_before_softmax(self, text, k=1):
-        
-        # sentence vector
-        sentence_vector = self.model.get_sentence_vector(text)
-        
-        # dot
-        result_vector = np.dot(self.output_matrix[self.language_indices, :], sentence_vector)
-
-        # softmax
-        softmax_result = np.exp(result_vector - np.max(result_vector)) / np.sum(np.exp(result_vector - np.max(result_vector)))
-
-        # top k predictions
-        top_k_indices = np.argsort(softmax_result)[-k:][::-1]
-        top_k_labels = [self.labels[i] for i in top_k_indices]
-        top_k_probs = softmax_result[top_k_indices]
-
-        return tuple(top_k_labels), top_k_probs
-
-
-    def predict_limit_after_softmax(self, text, k=1):
-        
-        # sentence vector
-        sentence_vector = self.model.get_sentence_vector(text)
-        
-        # dot
-        result_vector = np.dot(self.output_matrix, sentence_vector)
-
-        # softmax
-        softmax_result = np.exp(result_vector - np.max(result_vector)) / np.sum(np.exp(result_vector - np.max(result_vector)))
-
-        # limit softmax to language_indices
-        softmax_result = softmax_result[self.language_indices]
-
-        
-        # top k predictions
-        top_k_indices = np.argsort(softmax_result)[-k:][::-1]
-        top_k_labels = [self.labels[i] for i in top_k_indices]
-        top_k_probs = softmax_result[top_k_indices]
-
-        return tuple(top_k_labels), top_k_probs
-    
-
-    def optimized_predict_limit_before_softmax(self, text, k=1):
         
         # sentence vector
         sentence_vector = self.model.get_sentence_vector(text)
@@ -96,7 +47,7 @@ class CustomLID:
         return tuple(top_k_labels), top_k_probs
 
 
-    def optimized_predict_limit_after_softmax(self, text, k=1):
+    def predict_limit_after_softmax(self, text, k=1):
         
         # sentence vector
         sentence_vector = self.model.get_sentence_vector(text)
@@ -120,7 +71,7 @@ class CustomLID:
         top_k_probs = softmax_result[top_k_indices]
 
         return tuple(top_k_labels), top_k_probs
-
+    
 
 
 # download model
